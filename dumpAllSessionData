@@ -1,0 +1,31 @@
+package org.jimmy.vxml;
+
+import com.audium.server.AudiumException;
+import com.audium.server.global.ApplicationAPI;
+import com.audium.server.session.ActionElementData;
+import com.audium.server.voiceElement.ActionElementBase;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
+public class dumpAllSessionData
+  extends ActionElementBase
+{
+  public void doAction(String name, ActionElementData data)
+    throws AudiumException
+  {
+    HashMap hm = data.getAllSessionData();
+    Iterator it = hm.keySet().iterator();
+    String Status = "NODEBUG";
+    Status = data.getApplicationAPI().getApplicationData("Debug").toString();
+    data.addToLog("Dumping all Existing Session Data and ", "its values");
+    if (Status.equals("DEBUG")) {
+      while (it.hasNext())
+      {
+        String varName = (String)it.next();
+        data.addToLog(varName, data.getSessionData(varName).toString());
+      }
+    }
+    data.addToLog("Application Data is not set to Debug", Status);
+  }
+}
